@@ -1,1 +1,11 @@
-# BNP target definition placeholder
+# Brain Natriuretic Peptide (BNP) Target Definition
+target_name: "BNP"
+chain_id: "A"
+sequence: "SPKMVQGSGCFGRKMDRISSSSGLGCKVL"
+hotspots:
+  - res_idx: 10
+    res_name: "CYS"
+  - res_idx: 26
+    res_name: "CYS"
+constraints:
+  tolerance_angstrom: 1.0
