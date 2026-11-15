@@ -1,0 +1,23 @@
+# Model weights and caches: never committed, re-downloaded by the notebook (~6 GB)
+hf_cache/
+*.tar
+*.ckpt
+*.pt
+*.safetensors
+
+# Raw run output directories; only the metrics CSVs belong in results/
+*_run/
+noise_a/
+noise_b/
+out_*/
+*.cif
+*.pdb
+
+# Paper text does not live in this repository
+paper/
+*.docx
+*.tex
+
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
