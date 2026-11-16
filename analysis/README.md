@@ -1,29 +1,33 @@
 # analysis/
 
-Scripts that turn the raw CSVs in `results/` into the figures and tables of the paper.
-Each script reads from `results/` and writes nothing back into it.
+## first_batch_stats.py
 
-Planned, in the order they become useful:
+Descriptive comparison of the three first-batch targets (`bnp`, `anp`, and the
+shuffled-sequence negative control `scr`), 60 designs each, BoltzGen 0.3.2 on a
+Colab L4, single seed.
 
-| Script | Does |
-| --- | --- |
-| `noise_floor.py` | Compares two independent batches on the *same* target. Establishes the pipeline's run-to-run spread, which every later Δ must clear to count. |
-| `cross_score_matrix.py` | Builds the binder × target score table: BNP-designed binders scored on ANP and vice versa, plus the scrambled control. |
-| `delta_distribution.py` | The Δ (own-target minus cross-target score) distribution, against the noise floor from `noise_floor.py`. Distributions, not best-of-n. |
-| `ipsae.py` | Recomputes ipSAE from the PAE output the pipeline already produces, as a second, independent metric. Disagreement with iPTM is itself a result. |
+```
+python first_batch_stats.py results analysis
+```
 
-## Before writing any of these
+It expects `<results_dir>/{bnp,anp,scr}_all_designs_metrics.csv` (the raw
+BoltzGen metric tables) and writes `first_batch_descriptives.csv` and
+`first_batch_distributions.png` into `<out_dir>`.
 
-**The column names are not known yet.** They come from BoltzGen's own
-`all_designs_metrics.csv`, and must be read off a real file rather than assumed.
-`scores.py --columns <csv>` prints them. Nothing here should hard-code a column name
-that has not been seen in an actual results file.
+### Rules this script encodes (do not change without a reason)
 
-## Scoring caveat
+- Ranking score is `design_to_target_iptm`, with `min_design_to_target_pae`
+  (lower is better) as the secondary. `design_to_target_ipsae` is reported to
+  replicate Junker & Schoeder.
+- `quality_score` and every `rank_*` column are **within-batch rank-normalised**
+  and must never be compared across targets.
+- `design_ptm` is not used: its batch-to-batch drift (0.027) exceeds its own
+  per-design SD (0.024).
+- All of these are model **confidence, not affinity**. Boltz-2's affinity module
+  is small-molecule only.
+- Noise floor, measured on the same target with a new seed (n=20 per batch):
+  batch-mean iptm difference 0.022, per-design SD 0.107, SE of the mean ~0.024.
+  Means therefore reproduce only to about **+/-0.05**, and any between-target
+  difference has to clearly exceed that to mean anything.
 
-Every column these scripts touch is a **structural confidence metric** (pTM / pAE /
-iPTM / RMSD and interface terms), not a predicted affinity: Boltz-2's affinity module
-is protein–small-molecule only and does not apply to a 32-residue peptide target.
-There is no experimental ground truth in this project, so conclusions are limited to
-whether the pipeline's own scores discriminate — never to whether the designs really
-are selective.
+Findings are written up in `docs/first_batch_analysis_2026-11-16.md`.
