@@ -1,0 +1,4 @@
+target,n_designs,n_target_residues,sequence,cys_positions,mean_contact_freq_5.0A,min_contact_freq_5.0A,max_contact_freq_5.0A,sd_across_positions,n_positions_freq_ge_0.9,n_positions_freq_le_0.5,mean_residues_in_contact_per_design
+anp,15,28,SLRRSSCFGGRMDRIGAQSGLGCNSFRY,7|23,0.6286,0.1333,1.0,0.2706,5,11,17.6
+bnp,15,32,SPKMVQGSGCFGRKMDRISSSSGLGCKVLRRH,10|26,0.6875,0.0667,1.0,0.2955,13,10,22.0
+scr,15,32,KLMSGGHGSCVGSFRGSKPMRIKDRCSRVLSQ,10|26,0.6521,0.3333,1.0,0.1929,5,6,20.87
